@@ -38,6 +38,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = '__all__'
 
+class RecipeDetailSerializer(serializers.ModelSerializer):
+    chef = serializers.ReadOnlyField(source='chef.username')
+    category = CategorySerializer()
+    ingredients = IngredientSerializer(many=True)
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name', 'chef', 'category', 'ingredients', 'description', 'image', 'prep_time', 'cook_time', 'servings', 'created_at', 'updated_at']
+
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
