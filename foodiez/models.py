@@ -18,7 +18,7 @@ class Recipe(models.Model):
     title = models.CharField(max_length=255)
     chef = models.ForeignKey(User, on_delete=models.CASCADE,related_name='recipes')
     description = models.TextField()
-    image = models.ImageField(upload_to='')
+    image = models.ImageField(upload_to='media/')
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='recipes')
 
     def __str__(self):
@@ -29,7 +29,12 @@ class Rating(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     rating = models.IntegerField()
 
+    def __str__(self):
+        return f'{self.recipe.title}  {self.user.username}  {self.rating}'
+    
 class RecipeOfIngrediant(models.Model):
     recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE,related_name='ingrediant_of_recipe')
     ingrediant = models.ForeignKey(Ingredient, on_delete=models.CASCADE,related_name='recipe_of_ingrediant')
     
+    def __str__(self):
+        return f'{self.recipe.title}  {self.ingrediant.name}'

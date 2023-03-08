@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Category, Ingredient, Recipe, Rating
+from .models import Category, Ingredient, Recipe, Rating, RecipeOfIngrediant
 
 
 
@@ -32,22 +32,21 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RecipeSerializer(serializers.ModelSerializer):
-    chef = serializers.ReadOnlyField(source='chef.username')
-    category = CategorySerializer()
+
     class Meta:
         model = Recipe
-        fields = '__all__'
+        fields = ('title', 'chef', 'description', 'image', 'category',)
 
-class RecipeDetailSerializer(serializers.ModelSerializer):
-    chef = serializers.ReadOnlyField(source='chef.username')
-    category = CategorySerializer()
-    ingredients = IngredientSerializer(many=True)
+
+class RecipeOfIngrediantSerializer(serializers.ModelSerializer):
+    recipe = RecipeSerializer()
+    ingrediant = IngredientSerializer()
     class Meta:
-        model = Recipe
-        fields = ['id', 'name', 'chef', 'category', 'ingredients', 'description', 'image', 'prep_time', 'cook_time', 'servings', 'created_at', 'updated_at']
-
+        model = RecipeOfIngrediant
+        fields = ('id','recipe','ingrediant')
+   
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
-        fields = '__all__'
+        fields = ('id','recipe','user','rating')
 
